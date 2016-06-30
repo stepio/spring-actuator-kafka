@@ -16,8 +16,6 @@
 
 package org.stepio.kafka.support.metrics;
 
-import java.util.Map;
-
 import org.apache.kafka.common.Metric;
 import org.apache.kafka.common.MetricName;
 import org.apache.kafka.common.metrics.KafkaMetric;
@@ -29,6 +27,9 @@ import org.apache.kafka.common.metrics.KafkaMetric;
  * @author Igor Stepanov
  */
 public class KafkaMetricContainer {
+
+	protected static final String CLIENT_ID = "client-id";
+	protected static final String NODE_ID = "node-id";
 
 	private String metricName;
 	private String prefix;
@@ -53,15 +54,15 @@ public class KafkaMetricContainer {
 		StringBuilder builder = new StringBuilder();
 		builder.append(this.prefix);
 		builder.append('.');
-		builder.append(name.group());
-		for (Map.Entry<String, String> entry : name.tags().entrySet()) {
-			if (!entry.getKey().isEmpty() && !entry.getValue().isEmpty()) {
-				builder.append('.');
-				builder.append(entry.getKey());
-				builder.append('=');
-				builder.append(entry.getValue());
-			}
+		if (name.tags().containsKey(CLIENT_ID)) {
+			builder.append(name.tags().get(CLIENT_ID));
+			builder.append('.');
 		}
+		if (name.tags().containsKey(NODE_ID)) {
+			builder.append(name.tags().get(NODE_ID));
+			builder.append('.');
+		}
+		builder.append(name.group());
 		builder.append('.');
 		builder.append(name.name());
 		return builder.toString();
