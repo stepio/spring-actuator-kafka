@@ -43,11 +43,12 @@ public class KafkaStatisticsProvider implements MetricsReporter {
 
 	protected static final Logger LOGGER = LoggerFactory.getLogger(KafkaStatisticsProvider.class);
 
-	protected static final String METRICS_GAUGE_SERVICE_IMPL = "kafka.metrics.gauge.service.impl";
-	protected static final String METRICS_UPDATE_EXECUTOR_IMPL = "kafka.metrics.update.executor";
-	protected static final String METRICS_UPDATE_INTERVAL_PARAM = "kafka.metrics.update.interval";
+	public static final String METRICS_GAUGE_SERVICE_IMPL = "kafka.metrics.gauge.service.impl";
+	public static final String METRICS_UPDATE_EXECUTOR_IMPL = "kafka.metrics.update.executor";
+	public static final String METRICS_UPDATE_INTERVAL_PARAM = "kafka.metrics.update.interval";
+	public static final String METRICS_PREFIX_PARAM = "kafka.metrics.prefix";
+
 	protected static final long METRICS_UPDATE_INTERVAL_DEFAULT = 30000;
-	protected static final String METRICS_PREFIX_PARAM = "kafka.metrics.prefix";
 	protected static final String METRICS_PREFIX_DEFAULT = "kafka";
 
 	protected ConcurrentMap<MetricName, KafkaMetricContainer> configuredMetrics;
