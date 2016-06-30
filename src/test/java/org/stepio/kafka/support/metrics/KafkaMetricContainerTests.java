@@ -71,7 +71,7 @@ public class KafkaMetricContainerTests {
 	@Test
 	public void metricName_withConstantValues() {
 		assertThat(randomKafkaMetricContainer().getMetricName())
-				.isEqualTo(this.metricPrefix + ":type=" + this.metricGroup);
+				.isEqualTo(this.metricPrefix + '.' + this.metricGroup + '.' + this.metricName);
 	}
 
 	/**

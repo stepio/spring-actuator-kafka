@@ -52,16 +52,18 @@ public class KafkaMetricContainer {
 		MetricName name = metric.metricName();
 		StringBuilder builder = new StringBuilder();
 		builder.append(this.prefix);
-		builder.append(":type=");
+		builder.append('.');
 		builder.append(name.group());
 		for (Map.Entry<String, String> entry : name.tags().entrySet()) {
 			if (!entry.getKey().isEmpty() && !entry.getValue().isEmpty()) {
-				builder.append(",");
+				builder.append('.');
 				builder.append(entry.getKey());
-				builder.append("=");
+				builder.append('=');
 				builder.append(entry.getValue());
 			}
 		}
+		builder.append('.');
+		builder.append(name.name());
 		return builder.toString();
 	}
 }
