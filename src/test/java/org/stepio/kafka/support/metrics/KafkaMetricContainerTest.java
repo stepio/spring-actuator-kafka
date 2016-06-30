@@ -49,7 +49,7 @@ public class KafkaMetricContainerTest {
 	@Test
 	public void getValue_withKafkaMetricContainer_same() {
 		Metric metric = randomMetric();
-		KafkaMetricContainer metricContainer = new KafkaMetricContainer(metric);
+		KafkaMetricContainer metricContainer = new KafkaMetricContainer(metric, "test");
 		assertThat(metricContainer.getValue()).isSameAs(metric);
 	}
 
@@ -69,7 +69,7 @@ public class KafkaMetricContainerTest {
 	@Test
 	public void metricName_withConstantValues() {
 		assertThat(randomKafkaMetricContainer().getMetricName())
-				.isEqualTo(KafkaMetricContainer.PREFIX_KAFKA + metricGroup + "." + metricName);
+				.isEqualTo(KafkaStatisticsProvider.METRICS_UPDATE_INTERVAL_DEFAULT + ":type=" + metricGroup);
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class KafkaMetricContainerTest {
 	@Test
 	public void metricName_withNullName_NullPointerException() {
 		try {
-			new KafkaMetricContainer(randomMetric(new MetricName(null, metricGroup)));
+			new KafkaMetricContainer(randomMetric(new MetricName(null, metricGroup)), "test");
 			new AssertionError("NullPointerException should be thrown!");
 		}
 		catch (Exception ex) {
@@ -92,7 +92,7 @@ public class KafkaMetricContainerTest {
 	@Test
 	public void metricName_withNullGroup_NullPointerException() {
 		try {
-			new KafkaMetricContainer(randomMetric(new MetricName(metricName, null)));
+			new KafkaMetricContainer(randomMetric(new MetricName(metricName, null)), "test");
 			new AssertionError("NullPointerException should be thrown!");
 		}
 		catch (Exception ex) {
@@ -130,6 +130,6 @@ public class KafkaMetricContainerTest {
 	}
 
 	private KafkaMetricContainer randomKafkaMetricContainer() {
-		return new KafkaMetricContainer(randomMetric());
+		return new KafkaMetricContainer(randomMetric(), "test");
 	}
 }

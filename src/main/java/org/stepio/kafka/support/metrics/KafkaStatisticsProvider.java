@@ -16,7 +16,6 @@
 
 package org.stepio.kafka.support.metrics;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,7 +24,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.MetricName;
 import org.apache.kafka.common.metrics.KafkaMetric;
 import org.apache.kafka.common.metrics.MetricsReporter;
@@ -49,12 +47,15 @@ public class KafkaStatisticsProvider implements MetricsReporter {
 	protected static final String METRICS_UPDATE_EXECUTOR_IMPL = "kafka.metrics.update.executor";
 	protected static final String METRICS_UPDATE_INTERVAL_PARAM = "kafka.metrics.update.interval";
 	protected static final long METRICS_UPDATE_INTERVAL_DEFAULT = 30000;
+	protected static final String METRICS_PREFIX_PARAM = "kafka.metrics.prefix";
+	protected static final String METRICS_PREFIX_DEFAULT = "kafka";
 
 	protected ConcurrentMap<MetricName, KafkaMetricContainer> configuredMetrics;
 	protected ScheduledExecutorService executorService;
 	protected boolean closeExecutorService = false;
 	protected GaugeService gaugeService; // logically final, no setter - should not be updated once it's initialized
 	protected Long updateInterval; // logically final, no setter - should not be updated once it's initialized
+	protected String prefix;
 
 	public KafkaStatisticsProvider() {
 		LOGGER.info("Constructed an empty object");
@@ -70,7 +71,7 @@ public class KafkaStatisticsProvider implements MetricsReporter {
 
 	@Override
 	public void metricChange(KafkaMetric metric) {
-		KafkaMetricContainer container = new KafkaMetricContainer(metric);
+		KafkaMetricContainer container = new KafkaMetricContainer(metric, this.prefix);
 		this.configuredMetrics.put(metric.metricName(), container);
 		LOGGER.debug("Metric {} is added/modified", container.getMetricName());
 	}
@@ -99,6 +100,7 @@ public class KafkaStatisticsProvider implements MetricsReporter {
 		this.gaugeService = (GaugeService) configs.get(METRICS_GAUGE_SERVICE_IMPL);
 		this.executorService = (ScheduledExecutorService) configs.get(METRICS_UPDATE_EXECUTOR_IMPL);
 		this.updateInterval = (Long) configs.get(METRICS_UPDATE_INTERVAL_PARAM);
+		this.prefix = (String) configs.get(METRICS_PREFIX_PARAM);
 		postConstruct();
 	}
 
@@ -114,6 +116,9 @@ public class KafkaStatisticsProvider implements MetricsReporter {
 		}
 		if (this.updateInterval == null) {
 			this.updateInterval = METRICS_UPDATE_INTERVAL_DEFAULT;
+		}
+		if (this.prefix == null) {
+			this.prefix = METRICS_PREFIX_DEFAULT;
 		}
 		this.executorService.scheduleAtFixedRate(new Runnable() {
 			public void run() {
@@ -134,40 +139,5 @@ public class KafkaStatisticsProvider implements MetricsReporter {
 			}
 		}, 0, this.updateInterval, TimeUnit.MILLISECONDS);
 		LOGGER.info("Initialization complete, metrics updating scheduled with {} ms interval between the updates", this.updateInterval);
-	}
-
-	/**
-	 * Method for setting Kafka-related properties, required for proper updating of metrics.
-	 *
-	 * @param configs {@link Map} with Kafka-specific properties, required to initialize the appropriate consumer/producer.
-	 * @param gaugeService reference to an instance of Springs {@link GaugeService}, used to set the collected metrics
-	 * @param executorService reference to an instance of {@link ScheduledExecutorService}, used to schedule periodic values' recalculation for metrics
-	 * @param updateInterval interval for iterating the whole set of tracked metrics to recalculate and resubmit their values
-	 */
-	public static void configureKafkaMetrics(Map<String, Object> configs, GaugeService gaugeService, ScheduledExecutorService executorService, Long updateInterval) {
-		if (gaugeService == null) {
-			throw new NullPointerException("Initializing GaugeService as null is meaningless!");
-		}
-		configs.put(ConsumerConfig.METRIC_REPORTER_CLASSES_CONFIG, Collections.singletonList(KafkaStatisticsProvider.class.getCanonicalName()));
-		configs.put(METRICS_GAUGE_SERVICE_IMPL, gaugeService);
-		LOGGER.debug("Set property {} with provided GaugeService instance reference", METRICS_GAUGE_SERVICE_IMPL);
-		if (executorService != null) {
-			configs.put(METRICS_UPDATE_EXECUTOR_IMPL, executorService);
-			LOGGER.debug("Set property {} with provided ScheduledExecutorService instance reference", METRICS_UPDATE_EXECUTOR_IMPL);
-		}
-		if (updateInterval != null) {
-			configs.put(METRICS_UPDATE_INTERVAL_PARAM, updateInterval);
-			LOGGER.debug("Set property {} with value {}", METRICS_UPDATE_INTERVAL_PARAM, updateInterval);
-		}
-	}
-
-	/**
-	 * Overloaded method, which sets updateInterval with default value.
-	 *
-	 * @param configs {@link Map} with Kafka-specific properties, required to initialize the appropriate consumer/producer.
-	 * @param gaugeService reference to an instance of Spring's {@link GaugeService}, used to set the collected metrics
-	 */
-	public static void configureKafkaMetrics(Map<String, Object> configs, GaugeService gaugeService) {
-		configureKafkaMetrics(configs, gaugeService, null, null);
 	}
 }

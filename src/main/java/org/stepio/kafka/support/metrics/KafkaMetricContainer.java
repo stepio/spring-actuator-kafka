@@ -16,6 +16,8 @@
 
 package org.stepio.kafka.support.metrics;
 
+import java.util.Map;
+
 import org.apache.kafka.common.Metric;
 import org.apache.kafka.common.MetricName;
 import org.apache.kafka.common.metrics.KafkaMetric;
@@ -28,13 +30,13 @@ import org.apache.kafka.common.metrics.KafkaMetric;
  */
 public class KafkaMetricContainer {
 
-	protected static final String PREFIX_KAFKA = "kafka.";
-
 	private String metricName;
+	private String prefix;
 	private Metric value;
 
-	public KafkaMetricContainer(Metric value) {
+	public KafkaMetricContainer(Metric value, String prefix) {
 		this.value = value;
+		this.prefix = prefix;
 		this.metricName = metricName(value);
 	}
 
@@ -49,10 +51,17 @@ public class KafkaMetricContainer {
 	protected String metricName(Metric metric) {
 		MetricName name = metric.metricName();
 		StringBuilder builder = new StringBuilder();
-		builder.append(PREFIX_KAFKA);
+		builder.append(this.prefix);
+		builder.append(":type=");
 		builder.append(name.group());
-		builder.append('.');
-		builder.append(name.name());
+		for (Map.Entry<String, String> entry : name.tags().entrySet()) {
+			if (!entry.getKey().isEmpty() && !entry.getValue().isEmpty()) {
+				builder.append(",");
+				builder.append(entry.getKey());
+				builder.append("=");
+				builder.append(entry.getValue());
+			}
+		}
 		return builder.toString();
 	}
 }
