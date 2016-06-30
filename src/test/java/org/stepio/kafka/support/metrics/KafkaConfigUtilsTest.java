@@ -48,7 +48,7 @@ public class KafkaConfigUtilsTest {
 
 	@Before
 	public void initCounter() {
-		submittingCounter = new AtomicInteger();
+		this.submittingCounter = new AtomicInteger();
 	}
 
 	@Test
@@ -110,6 +110,24 @@ public class KafkaConfigUtilsTest {
 				.asList()
 				.contains(KafkaStatisticsProvider.class.getCanonicalName());
 		assertThat(config.get(KafkaStatisticsProvider.METRICS_GAUGE_SERVICE_IMPL)).isSameAs(gaugeService);
+		assertThat(config.get(KafkaStatisticsProvider.METRICS_PREFIX_PARAM)).isNull();
+		assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_EXECUTOR_IMPL)).isNull();
+		assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_INTERVAL_PARAM)).isNull();
+	}
+
+	@Test
+	public void configureKafkaMetrics_withGaugeServiceAndPrefix() {
+		Map<String, Object> config = new HashMap<>();
+		assertThat(config).isEmpty();
+		GaugeService gaugeService = mockGaugeService();
+		String prefix = "test.prefix";
+		KafkaConfigUtils.configureKafkaMetrics(config, gaugeService, prefix, null, null);
+		assertThat(config).hasSize(3);
+		assertThat(config.get(CommonClientConfigs.METRIC_REPORTER_CLASSES_CONFIG))
+				.asList()
+				.contains(KafkaStatisticsProvider.class.getCanonicalName());
+		assertThat(config.get(KafkaStatisticsProvider.METRICS_GAUGE_SERVICE_IMPL)).isSameAs(gaugeService);
+		assertThat(config.get(KafkaStatisticsProvider.METRICS_PREFIX_PARAM)).isEqualTo(prefix);
 		assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_EXECUTOR_IMPL)).isNull();
 		assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_INTERVAL_PARAM)).isNull();
 	}
@@ -126,6 +144,7 @@ public class KafkaConfigUtilsTest {
 				.asList()
 				.contains(KafkaStatisticsProvider.class.getCanonicalName());
 		assertThat(config.get(KafkaStatisticsProvider.METRICS_GAUGE_SERVICE_IMPL)).isSameAs(gaugeService);
+		assertThat(config.get(KafkaStatisticsProvider.METRICS_PREFIX_PARAM)).isNull();
 		assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_EXECUTOR_IMPL)).isNull();
 		assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_INTERVAL_PARAM)).isEqualTo(universalAnswer);
 	}
@@ -143,6 +162,7 @@ public class KafkaConfigUtilsTest {
 					.asList()
 					.contains(KafkaStatisticsProvider.class.getCanonicalName());
 			assertThat(config.get(KafkaStatisticsProvider.METRICS_GAUGE_SERVICE_IMPL)).isSameAs(gaugeService);
+			assertThat(config.get(KafkaStatisticsProvider.METRICS_PREFIX_PARAM)).isNull();
 			assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_EXECUTOR_IMPL)).isSameAs(executors);
 			assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_INTERVAL_PARAM)).isNull();
 		}
@@ -157,7 +177,7 @@ public class KafkaConfigUtilsTest {
 			public Void answer(InvocationOnMock invocation) {
 				Object[] args = invocation.getArguments();
 				KafkaConfigUtils.LOGGER.info("Called GaugeService.submit with arguments: {}", Arrays.toString(args));
-				submittingCounter.incrementAndGet();
+				KafkaConfigUtilsTest.this.submittingCounter.incrementAndGet();
 				return null;
 			}
 		}).given(gauge).submit(anyString(), anyDouble());

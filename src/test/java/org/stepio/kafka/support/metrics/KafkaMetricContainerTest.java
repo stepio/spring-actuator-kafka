@@ -34,13 +34,15 @@ import org.junit.Test;
 public class KafkaMetricContainerTest {
 
 	private Random random;
+	private String metricPrefix;
 	private String metricGroup;
 	private String metricName;
 
 	public KafkaMetricContainerTest() {
-		random = new Random();
-		metricGroup = "first_dummy_value";
-		metricName = "second_dummy_value";
+		this.random = new Random();
+		this.metricPrefix = "first_dummy_value";
+		this.metricGroup = "second_dummy_value";
+		this.metricName = "third_dummy_value";
 	}
 
 	/**
@@ -69,7 +71,7 @@ public class KafkaMetricContainerTest {
 	@Test
 	public void metricName_withConstantValues() {
 		assertThat(randomKafkaMetricContainer().getMetricName())
-				.isEqualTo(KafkaStatisticsProvider.METRICS_UPDATE_INTERVAL_DEFAULT + ":type=" + metricGroup);
+				.isEqualTo(this.metricPrefix + ":type=" + this.metricGroup);
 	}
 
 	/**
@@ -78,7 +80,7 @@ public class KafkaMetricContainerTest {
 	@Test
 	public void metricName_withNullName_NullPointerException() {
 		try {
-			new KafkaMetricContainer(randomMetric(new MetricName(null, metricGroup)), "test");
+			new KafkaMetricContainer(randomMetric(new MetricName(null, this.metricGroup)), this.metricPrefix);
 			new AssertionError("NullPointerException should be thrown!");
 		}
 		catch (Exception ex) {
@@ -92,7 +94,7 @@ public class KafkaMetricContainerTest {
 	@Test
 	public void metricName_withNullGroup_NullPointerException() {
 		try {
-			new KafkaMetricContainer(randomMetric(new MetricName(metricName, null)), "test");
+			new KafkaMetricContainer(randomMetric(new MetricName(this.metricName, null)), this.metricPrefix);
 			new AssertionError("NullPointerException should be thrown!");
 		}
 		catch (Exception ex) {
@@ -115,7 +117,7 @@ public class KafkaMetricContainerTest {
 	}
 
 	private MetricName constMetricName() {
-		return new MetricName(metricName, metricGroup);
+		return new MetricName(this.metricName, this.metricGroup);
 	}
 
 	private Metric randomMetric() {
@@ -124,12 +126,12 @@ public class KafkaMetricContainerTest {
 
 	private Metric randomMetric(MetricName name) {
 		Metric metric = mock(Metric.class);
-		given(metric.value()).willReturn(random.nextDouble());
+		given(metric.value()).willReturn(this.random.nextDouble());
 		given(metric.metricName()).willReturn(name);
 		return metric;
 	}
 
 	private KafkaMetricContainer randomKafkaMetricContainer() {
-		return new KafkaMetricContainer(randomMetric(), "test");
+		return new KafkaMetricContainer(randomMetric(), this.metricPrefix);
 	}
 }
