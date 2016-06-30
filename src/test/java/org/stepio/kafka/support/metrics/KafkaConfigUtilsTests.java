@@ -18,22 +18,14 @@ package org.stepio.kafka.support.metrics;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.mock;
-import static org.mockito.BDDMockito.willAnswer;
-import static org.mockito.Matchers.anyDouble;
-import static org.mockito.Matchers.anyString;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.kafka.clients.CommonClientConfigs;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import org.springframework.boot.actuate.metrics.GaugeService;
 
@@ -42,14 +34,7 @@ import org.springframework.boot.actuate.metrics.GaugeService;
  *
  * @author Igor Stepanov
  */
-public class KafkaConfigUtilsTest {
-
-	private AtomicInteger submittingCounter;
-
-	@Before
-	public void initCounter() {
-		this.submittingCounter = new AtomicInteger();
-	}
+public class KafkaConfigUtilsTests {
 
 	@Test
 	public void configureKafkaMetrics_withNullMap_NullPointerException() {
@@ -172,15 +157,6 @@ public class KafkaConfigUtilsTest {
 	}
 
 	private GaugeService mockGaugeService() {
-		GaugeService gauge = mock(GaugeService.class);
-		willAnswer(new Answer<Void>() {
-			public Void answer(InvocationOnMock invocation) {
-				Object[] args = invocation.getArguments();
-				KafkaConfigUtils.LOGGER.info("Called GaugeService.submit with arguments: {}", Arrays.toString(args));
-				KafkaConfigUtilsTest.this.submittingCounter.incrementAndGet();
-				return null;
-			}
-		}).given(gauge).submit(anyString(), anyDouble());
-		return gauge;
+		return mock(GaugeService.class);
 	}
 }

@@ -31,14 +31,14 @@ import org.junit.Test;
  *
  * @author Igor Stepanov
  */
-public class KafkaMetricContainerTest {
+public class KafkaMetricContainerTests {
 
 	private Random random;
 	private String metricPrefix;
 	private String metricGroup;
 	private String metricName;
 
-	public KafkaMetricContainerTest() {
+	public KafkaMetricContainerTests() {
 		this.random = new Random();
 		this.metricPrefix = "first_dummy_value";
 		this.metricGroup = "second_dummy_value";
