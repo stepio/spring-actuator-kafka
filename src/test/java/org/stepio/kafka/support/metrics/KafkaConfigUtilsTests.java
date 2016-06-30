@@ -41,7 +41,7 @@ public class KafkaConfigUtilsTests {
 		ScheduledExecutorService executors = Executors.newSingleThreadScheduledExecutor();
 		try {
 			try {
-				KafkaConfigUtils.configureKafkaMetrics(null, mockGaugeService(), "test");
+				KafkaConfigUtils.configureKafkaMetrics(null, mockGaugeService());
 				new AssertionError("NullPointerException should be thrown!");
 			}
 			catch (Exception ex) {
@@ -65,7 +65,7 @@ public class KafkaConfigUtilsTests {
 		ScheduledExecutorService executors = Executors.newSingleThreadScheduledExecutor();
 		try {
 			try {
-				KafkaConfigUtils.configureKafkaMetrics(new HashMap<String, Object>(), null, "test");
+				KafkaConfigUtils.configureKafkaMetrics(new HashMap<String, Object>(), null);
 				new AssertionError("NullPointerException should be thrown!");
 			}
 			catch (Exception ex) {
@@ -89,7 +89,7 @@ public class KafkaConfigUtilsTests {
 		Map<String, Object> config = new HashMap<>();
 		assertThat(config).isEmpty();
 		GaugeService gaugeService = mockGaugeService();
-		KafkaConfigUtils.configureKafkaMetrics(config, gaugeService, null);
+		KafkaConfigUtils.configureKafkaMetrics(config, gaugeService);
 		assertThat(config).hasSize(2);
 		assertThat(config.get(CommonClientConfigs.METRIC_REPORTER_CLASSES_CONFIG))
 				.asList()

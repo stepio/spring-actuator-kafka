@@ -74,9 +74,8 @@ public final class KafkaConfigUtils {
 	 *
 	 * @param configs      {@link Map} with Kafka-specific properties, required to initialize the appropriate consumer/producer.
 	 * @param gaugeService reference to an instance of Spring's {@link GaugeService}, used to set the collected metrics
-	 * @param prefix       initial part of the metric's label
 	 */
-	public static void configureKafkaMetrics(Map<String, Object> configs, GaugeService gaugeService, String prefix) {
-		configureKafkaMetrics(configs, gaugeService, prefix, null, null);
+	public static void configureKafkaMetrics(Map<String, Object> configs, GaugeService gaugeService) {
+		configureKafkaMetrics(configs, gaugeService, null, null, null);
 	}
 }
