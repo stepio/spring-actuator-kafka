@@ -19,6 +19,7 @@
 		<java.version>1.7</java.version>
 		<assertj.version>2.4.1</assertj.version>
 		<kafka.version>0.9.0.1</kafka.version>
+		<powermock.version>1.6.5</powermock.version>
 	</properties>
 
 	<dependencyManagement>
@@ -32,6 +33,16 @@
 				<groupId>org.assertj</groupId>
 				<artifactId>assertj-core</artifactId>
 				<version>${assertj.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.powermock</groupId>
+				<artifactId>powermock-api-mockito</artifactId>
+				<version>${powermock.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.powermock</groupId>
+				<artifactId>powermock-module-junit4</artifactId>
+				<version>${powermock.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -49,6 +60,16 @@
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

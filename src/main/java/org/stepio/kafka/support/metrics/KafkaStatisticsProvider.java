@@ -43,9 +43,32 @@ public class KafkaStatisticsProvider implements MetricsReporter {
 
 	protected static final Logger LOGGER = LoggerFactory.getLogger(KafkaStatisticsProvider.class);
 
+	/**
+	 * Custom property for Kafka's {@link org.apache.kafka.common.Configurable}
+	 * to specify Spring's {@link GaugeService} implementation for metrics' reporting.
+	 * Required.
+	 */
 	public static final String METRICS_GAUGE_SERVICE_IMPL = "kafka.metrics.gauge.service.impl";
+	/**
+	 * Custom property for Kafka's {@link org.apache.kafka.common.Configurable}
+	 * to specify {@link ScheduledExecutorService}, for handling the recalculation of metrics' values.
+	 * Optional, default value: {@link Executors#newSingleThreadExecutor()}.
+	 */
 	public static final String METRICS_UPDATE_EXECUTOR_IMPL = "kafka.metrics.update.executor";
+	/**
+	 * Custom property for Kafka's {@link org.apache.kafka.common.Configurable}
+	 * to specify interval for metrics' recalculating (in milliseconds).
+	 * Optional, default value: 30000.
+	 */
 	public static final String METRICS_UPDATE_INTERVAL_PARAM = "kafka.metrics.update.interval";
+	/**
+	 * Custom property for Kafka's {@link org.apache.kafka.common.Configurable}
+	 * to specify naming prefix for metrics.
+	 * Optional, default value: "kafka".
+	 * <p>
+	 * Note: Spring Actuator's default prefix for {@link GaugeService} is "gauge", so resulting default prefix is "gauge.kafka"
+	 * Same rule is applicable for custom metrics as well.
+	 */
 	public static final String METRICS_PREFIX_PARAM = "kafka.metrics.prefix";
 
 	protected static final long METRICS_UPDATE_INTERVAL_DEFAULT = 30000;
@@ -90,7 +113,7 @@ public class KafkaStatisticsProvider implements MetricsReporter {
 	 */
 	@Override
 	public void close() {
-		if (this.executorService != null && this.closeExecutorService) {
+		if (this.executorService != null && !this.executorService.isShutdown() && this.closeExecutorService) {
 			this.executorService.shutdown();
 			LOGGER.info("Object cleared, executor stopped");
 		}

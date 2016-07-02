@@ -16,6 +16,9 @@
 
 package org.stepio.kafka.support.metrics;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 import org.apache.kafka.common.Metric;
 import org.apache.kafka.common.MetricName;
 import org.apache.kafka.common.metrics.KafkaMetric;
@@ -54,13 +57,11 @@ public class KafkaMetricContainer {
 		StringBuilder builder = new StringBuilder();
 		builder.append(this.prefix);
 		builder.append('.');
-		if (name.tags().containsKey(CLIENT_ID)) {
-			builder.append(name.tags().get(CLIENT_ID));
-			builder.append('.');
-		}
-		if (name.tags().containsKey(NODE_ID)) {
-			builder.append(name.tags().get(NODE_ID));
-			builder.append('.');
+		for (Map.Entry<String, String> entry : new TreeMap<>(name.tags()).entrySet()) {
+			if (!entry.getKey().isEmpty() && !entry.getValue().isEmpty()) {
+				builder.append(entry.getValue());
+				builder.append('.');
+			}
 		}
 		builder.append(name.group());
 		builder.append('.');

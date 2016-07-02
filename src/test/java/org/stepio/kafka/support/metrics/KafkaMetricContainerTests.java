@@ -75,7 +75,21 @@ public class KafkaMetricContainerTests {
 	}
 
 	/**
-	 * {@link MetricName} cannot be initialized without name.
+	 * Tags' values are used in metric's name, ordered by the appropriate keys.
+	 */
+	@Test
+	public void metricName_withConstantValuesAndTags() {
+		final String tag1 = "some_dummy_key";
+		final String tag2 = "another_dummy_key";
+		final String value1 = "some_dummy_val";
+		final String value2 = "another_dummy_val";
+		assertThat(randomKafkaMetricContainer(new MetricName(this.metricName, this.metricGroup, "Test metric", tag1, value1, tag2, value2))
+				.getMetricName())
+				.isEqualTo(this.metricPrefix + '.' + value2 + '.' + value1 + '.' + this.metricGroup + '.' + this.metricName);
+	}
+
+	/**
+	 * Instance of {@link MetricName} cannot be initialized without name.
 	 */
 	@Test
 	public void metricName_withNullName_NullPointerException() {
@@ -89,7 +103,7 @@ public class KafkaMetricContainerTests {
 	}
 
 	/**
-	 * {@link MetricName} cannot be initialized without group.
+	 * Instance of {@link MetricName} cannot be initialized without group.
 	 */
 	@Test
 	public void metricName_withNullGroup_NullPointerException() {
@@ -116,22 +130,26 @@ public class KafkaMetricContainerTests {
 		}
 	}
 
-	private MetricName constMetricName() {
+	protected MetricName constMetricName() {
 		return new MetricName(this.metricName, this.metricGroup);
 	}
 
-	private Metric randomMetric() {
+	protected Metric randomMetric() {
 		return randomMetric(constMetricName());
 	}
 
-	private Metric randomMetric(MetricName name) {
+	protected Metric randomMetric(MetricName name) {
 		Metric metric = mock(Metric.class);
 		given(metric.value()).willReturn(this.random.nextDouble());
 		given(metric.metricName()).willReturn(name);
 		return metric;
 	}
 
-	private KafkaMetricContainer randomKafkaMetricContainer() {
-		return new KafkaMetricContainer(randomMetric(), this.metricPrefix);
+	protected KafkaMetricContainer randomKafkaMetricContainer(MetricName name) {
+		return new KafkaMetricContainer(randomMetric(name), this.metricPrefix);
+	}
+
+	protected KafkaMetricContainer randomKafkaMetricContainer() {
+		return randomKafkaMetricContainer(constMetricName());
 	}
 }
