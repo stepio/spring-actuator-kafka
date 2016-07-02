@@ -68,7 +68,19 @@ gauge.kafka.consumer-2.node--2.consumer-node-metrics.request-size-avg: 0,
 
 ```
 
-This implementation is just a POC - appreciate your feedback/recommendations.
+This implementation is just a POC - appreciate your feedback/recommendations. As a side effect, I do not intend to publish it to maven central as of now, so to get the jar you may do the following:
+
+1. Clone the project locally and navigate to its folder via console/terminal.
+2. Make sure that java 8 is installed and `JAVA_HOME` is set properly.
+3. Execute `./mvnw clean install`
+4. Enrich your project's pom.xml with next block:
+```xml
+    <dependency>
+        <groupId>org.stepio.kafka</groupId>
+        <artifactId>spring-actuator-kafka</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+```
 
 Related issues:
  - https://github.com/spring-projects/spring-kafka/issues/127
