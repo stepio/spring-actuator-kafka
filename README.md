@@ -19,7 +19,9 @@ Tested with [spring-projects/spring-kafka](https://github.com/spring-projects/sp
         props.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaGroup);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializerClass);
-        KafkaConfigUtils.configureKafkaMetrics(props, gaugeService); // implemented a "helper" method which sets the required properties
+        // implemented a "helper" method which sets the required properties:
+        KafkaConfigUtils.configureKafkaMetrics(props, gaugeService);
+        // alternalive option: public static void configureKafkaMetrics(Map<String, Object> configs, GaugeService gaugeService, String prefix, ScheduledExecutorService executorService, Long updateInterval)
         return props;
     }
 ```
@@ -37,7 +39,9 @@ Similar approach is relevant for producer creation:
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, broker);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        KafkaConfigUtils.configureKafkaMetrics(props, gaugeService); // implemented a "helper" method which sets the required properties
+        // implemented a "helper" method which sets the required properties:
+        KafkaConfigUtils.configureKafkaMetrics(props, gaugeService);
+        // alternalive option: public static void configureKafkaMetrics(Map<String, Object> configs, GaugeService gaugeService, String prefix, ScheduledExecutorService executorService, Long updateInterval)
         return props;
     }
 ```
