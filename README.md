@@ -4,6 +4,12 @@ This tiny project provides implementation for `MetricsReporter` interface, backe
 
 Tested with [spring-projects/spring-kafka](https://github.com/spring-projects/spring-kafka). Example for consumer creation:
 ```java
+    private Class<S> deserializerClass;
+    private String kafkaBroker;
+    private String kafkaGroup;
+    private Integer kafkaConcurrency;
+    // Spring Actuator's GaugeService should be initialized before passing it to Kafka
+    // Use @Autowired, for example
     private GaugeService gaugeService;
 
     public ConcurrentKafkaListenerContainerFactory<String, T> listenerContainerFactory() {
@@ -28,6 +34,9 @@ Tested with [spring-projects/spring-kafka](https://github.com/spring-projects/sp
 
 Similar approach is relevant for producer creation:
 ```java
+    private String kafkaBroker;
+    // Spring Actuator's GaugeService should be initialized before passing it to Kafka
+    // Use @Autowired, for example
     private GaugeService gaugeService;
 
     public KafkaTemplate<String, T> kafkaTemplate() {
