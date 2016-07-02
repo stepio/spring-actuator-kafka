@@ -96,3 +96,4 @@ This implementation is just a POC - appreciate your feedback/recommendations. As
 Related issues:
  - https://github.com/spring-projects/spring-kafka/issues/127
  - https://github.com/spring-projects/spring-boot/issues/6227
+ - https://issues.apache.org/jira/browse/KAFKA-3923
