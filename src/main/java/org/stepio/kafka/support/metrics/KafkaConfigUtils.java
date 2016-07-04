@@ -52,7 +52,7 @@ public final class KafkaConfigUtils {
 		if (gaugeService == null) {
 			throw new NullPointerException("Initializing GaugeService as null is meaningless!");
 		}
-		configs.put(CommonClientConfigs.METRIC_REPORTER_CLASSES_CONFIG, Collections.singletonList(KafkaStatisticsProvider.class.getCanonicalName()));
+		configs.put(CommonClientConfigs.METRIC_REPORTER_CLASSES_CONFIG, Collections.singletonList(KafkaStatisticsProvider.class.getName()));
 		configs.put(KafkaStatisticsProvider.METRICS_GAUGE_SERVICE_IMPL, gaugeService);
 		LOGGER.debug("Set property {} with provided GaugeService instance reference", KafkaStatisticsProvider.METRICS_GAUGE_SERVICE_IMPL);
 		if (executorService != null) {
