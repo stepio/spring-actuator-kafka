@@ -50,7 +50,7 @@ public final class KafkaConfigUtils {
 	 */
 	public static void configureKafkaMetrics(Map<String, Object> configs, GaugeService gaugeService, String prefix, ScheduledExecutorService executorService, Long updateInterval) {
 		if (gaugeService == null) {
-			throw new NullPointerException("Initializing GaugeService as null is meaningless!");
+			throw new IllegalArgumentException("Initializing GaugeService as null is meaningless!");
 		}
 		configs.put(CommonClientConfigs.METRIC_REPORTER_CLASSES_CONFIG, Collections.singletonList(KafkaStatisticsProvider.class.getName()));
 		configs.put(KafkaStatisticsProvider.METRICS_GAUGE_SERVICE_IMPL, gaugeService);

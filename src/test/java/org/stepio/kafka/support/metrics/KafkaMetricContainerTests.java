@@ -17,6 +17,7 @@
 package org.stepio.kafka.support.metrics;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
 
@@ -24,6 +25,7 @@ import java.util.Random;
 
 import org.apache.kafka.common.Metric;
 import org.apache.kafka.common.MetricName;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
 
 /**
@@ -93,13 +95,13 @@ public class KafkaMetricContainerTests {
 	 */
 	@Test
 	public void metricName_withNullName_NullPointerException() {
-		try {
-			new KafkaMetricContainer(randomMetric(new MetricName(null, this.metricGroup)), this.metricPrefix);
-			new AssertionError("NullPointerException should be thrown!");
-		}
-		catch (Exception ex) {
-			assertThat(ex).isInstanceOf(NullPointerException.class);
-		}
+		assertThatExceptionOfType(NullPointerException.class)
+				.isThrownBy(new ThrowableAssert.ThrowingCallable() {
+					@Override
+					public void call() throws Throwable {
+						new KafkaMetricContainer(randomMetric(new MetricName(null, KafkaMetricContainerTests.this.metricGroup)), KafkaMetricContainerTests.this.metricPrefix);
+					}
+				});
 	}
 
 	/**
@@ -107,13 +109,13 @@ public class KafkaMetricContainerTests {
 	 */
 	@Test
 	public void metricName_withNullGroup_NullPointerException() {
-		try {
-			new KafkaMetricContainer(randomMetric(new MetricName(this.metricName, null)), this.metricPrefix);
-			new AssertionError("NullPointerException should be thrown!");
-		}
-		catch (Exception ex) {
-			assertThat(ex).isInstanceOf(NullPointerException.class);
-		}
+		assertThatExceptionOfType(NullPointerException.class)
+				.isThrownBy(new ThrowableAssert.ThrowingCallable() {
+					@Override
+					public void call() throws Throwable {
+						new KafkaMetricContainer(randomMetric(new MetricName(KafkaMetricContainerTests.this.metricName, null)), KafkaMetricContainerTests.this.metricPrefix);
+					}
+				});
 	}
 
 	/**
@@ -121,13 +123,13 @@ public class KafkaMetricContainerTests {
 	 */
 	@Test
 	public void metricName_withNull_NullPointerException() {
-		try {
-			randomKafkaMetricContainer().metricName(null);
-			new AssertionError("NullPointerException should be thrown!");
-		}
-		catch (Exception ex) {
-			assertThat(ex).isInstanceOf(NullPointerException.class);
-		}
+		assertThatExceptionOfType(NullPointerException.class)
+				.isThrownBy(new ThrowableAssert.ThrowingCallable() {
+					@Override
+					public void call() throws Throwable {
+						randomKafkaMetricContainer().metricName(null);
+					}
+				});
 	}
 
 	protected MetricName constMetricName() {

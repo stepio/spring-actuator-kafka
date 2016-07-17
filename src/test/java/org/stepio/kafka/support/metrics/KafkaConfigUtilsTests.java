@@ -17,6 +17,7 @@
 package org.stepio.kafka.support.metrics;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.BDDMockito.mock;
 
 import java.util.HashMap;
@@ -25,6 +26,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 import org.apache.kafka.clients.CommonClientConfigs;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
 
 import org.springframework.boot.actuate.metrics.GaugeService;
@@ -38,22 +40,22 @@ public class KafkaConfigUtilsTests {
 
 	@Test
 	public void configureKafkaMetrics_withNullMap_NullPointerException() {
-		ScheduledExecutorService executors = Executors.newSingleThreadScheduledExecutor();
+		assertThatExceptionOfType(NullPointerException.class)
+				.isThrownBy(new ThrowableAssert.ThrowingCallable() {
+					@Override
+					public void call() throws Throwable {
+						KafkaConfigUtils.configureKafkaMetrics(null, mockGaugeService());
+					}
+				});
+		final ScheduledExecutorService executors = Executors.newSingleThreadScheduledExecutor();
 		try {
-			try {
-				KafkaConfigUtils.configureKafkaMetrics(null, mockGaugeService());
-				new AssertionError("NullPointerException should be thrown!");
-			}
-			catch (Exception ex) {
-				assertThat(ex).isInstanceOf(NullPointerException.class);
-			}
-			try {
-				KafkaConfigUtils.configureKafkaMetrics(null, mockGaugeService(), "test", executors, 10L);
-				new AssertionError("NullPointerException should be thrown!");
-			}
-			catch (Exception ex) {
-				assertThat(ex).isInstanceOf(NullPointerException.class);
-			}
+			assertThatExceptionOfType(NullPointerException.class)
+					.isThrownBy(new ThrowableAssert.ThrowingCallable() {
+						@Override
+						public void call() throws Throwable {
+							KafkaConfigUtils.configureKafkaMetrics(null, mockGaugeService(), "test", executors, 10L);
+						}
+					});
 		}
 		finally {
 			executors.shutdown();
@@ -62,22 +64,24 @@ public class KafkaConfigUtilsTests {
 
 	@Test
 	public void configureKafkaMetrics_withNullGaugeService_NullPointerException() {
-		ScheduledExecutorService executors = Executors.newSingleThreadScheduledExecutor();
+		assertThatExceptionOfType(IllegalArgumentException.class)
+				.isThrownBy(new ThrowableAssert.ThrowingCallable() {
+					@Override
+					public void call() throws Throwable {
+						KafkaConfigUtils.configureKafkaMetrics(new HashMap<String, Object>(), null);
+					}
+				})
+				.withMessageContaining("Initializing GaugeService as null is meaningless!");
+		final ScheduledExecutorService executors = Executors.newSingleThreadScheduledExecutor();
 		try {
-			try {
-				KafkaConfigUtils.configureKafkaMetrics(new HashMap<String, Object>(), null);
-				new AssertionError("NullPointerException should be thrown!");
-			}
-			catch (Exception ex) {
-				assertThat(ex).isInstanceOf(NullPointerException.class);
-			}
-			try {
-				KafkaConfigUtils.configureKafkaMetrics(new HashMap<String, Object>(), null, "test", executors, 10L);
-				new AssertionError("NullPointerException should be thrown!");
-			}
-			catch (Exception ex) {
-				assertThat(ex).isInstanceOf(NullPointerException.class);
-			}
+			assertThatExceptionOfType(IllegalArgumentException.class)
+					.isThrownBy(new ThrowableAssert.ThrowingCallable() {
+						@Override
+						public void call() throws Throwable {
+							KafkaConfigUtils.configureKafkaMetrics(new HashMap<String, Object>(), null, "test", executors, 10L);
+						}
+					})
+					.withMessageContaining("Initializing GaugeService as null is meaningless!");
 		}
 		finally {
 			executors.shutdown();
