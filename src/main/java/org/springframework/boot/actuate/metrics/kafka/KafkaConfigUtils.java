@@ -33,7 +33,7 @@ import org.springframework.boot.actuate.metrics.GaugeService;
  */
 public final class KafkaConfigUtils {
 
-	protected static final Logger LOGGER = LoggerFactory.getLogger(KafkaConfigUtils.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(KafkaConfigUtils.class);
 
 	private KafkaConfigUtils() {
 	}

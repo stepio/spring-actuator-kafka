@@ -41,7 +41,7 @@ import org.springframework.boot.actuate.metrics.GaugeService;
  */
 public class KafkaStatisticsProvider implements MetricsReporter {
 
-	protected static final Logger LOGGER = LoggerFactory.getLogger(KafkaStatisticsProvider.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(KafkaStatisticsProvider.class);
 
 	/**
 	 * Custom property for Kafka's {@link org.apache.kafka.common.Configurable}
