@@ -43,6 +43,8 @@ import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.boot.actuate.metrics.GaugeService;
 
@@ -59,6 +61,8 @@ import org.springframework.boot.actuate.metrics.GaugeService;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(KafkaMetric.class)
 public class KafkaStatisticsProviderTests {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(KafkaStatisticsProvider.class);
 
 	private Random random;
 	private String metricGroup;
@@ -144,7 +148,7 @@ public class KafkaStatisticsProviderTests {
 				assertThat(customProvider.executorService.isShutdown()).isTrue();
 			}
 			catch (Exception ex) {
-				KafkaStatisticsProvider.LOGGER.error("Failed to shutdown executor", ex);
+				LOGGER.error("Failed to shutdown executor", ex);
 			}
 		}
 	}
@@ -218,7 +222,7 @@ public class KafkaStatisticsProviderTests {
 		willAnswer(new Answer<Void>() {
 			public Void answer(InvocationOnMock invocation) {
 				Object[] args = invocation.getArguments();
-				KafkaConfigUtils.LOGGER.info("Called GaugeService.submit with arguments: {}", Arrays.toString(args));
+				LOGGER.info("Called GaugeService.submit with arguments: {}", Arrays.toString(args));
 				KafkaStatisticsProviderTests.this.latch.countDown();
 				return null;
 			}
