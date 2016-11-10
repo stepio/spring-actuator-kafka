@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package org.stepio.kafka.support.metrics;
-
-import java.util.Collections;
-import java.util.Map;
-import java.util.concurrent.ScheduledExecutorService;
+package org.springframework.boot.actuate.metrics.kafka;
 
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.boot.actuate.metrics.GaugeService;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Utility methods to simplify the initialization of properties, required for metrics' gathering.
@@ -36,7 +35,6 @@ public final class KafkaConfigUtils {
 	protected static final Logger LOGGER = LoggerFactory.getLogger(KafkaConfigUtils.class);
 
 	private KafkaConfigUtils() {
-		LOGGER.debug("Utility classes should not have a public or default constructor");
 	}
 
 	/**

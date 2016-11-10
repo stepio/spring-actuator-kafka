@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.stepio.kafka.support.metrics;
+package org.springframework.boot.actuate.metrics.kafka;
 
 import java.util.List;
 import java.util.Map;
@@ -71,18 +71,18 @@ public class KafkaStatisticsProvider implements MetricsReporter {
 	 */
 	public static final String METRICS_PREFIX_PARAM = "kafka.metrics.prefix";
 
-	protected static final long METRICS_UPDATE_INTERVAL_DEFAULT = 30000;
-	protected static final String METRICS_PREFIX_DEFAULT = "kafka";
+	static final long METRICS_UPDATE_INTERVAL_DEFAULT = 30000;
+	static final String METRICS_PREFIX_DEFAULT = "kafka";
 
 	protected ConcurrentMap<MetricName, KafkaMetricContainer> configuredMetrics;
 	protected ScheduledExecutorService executorService;
 	protected boolean closeExecutorService = false;
-	protected GaugeService gaugeService; // logically final, no setter - should not be updated once it's initialized
-	protected Long updateInterval; // logically final, no setter - should not be updated once it's initialized
+	protected GaugeService gaugeService; // effectively final, no setter - should not be updated once it's initialized
+	protected Long updateInterval; // effectively final, no setter - should not be updated once it's initialized
 	protected String prefix;
 
 	public KafkaStatisticsProvider() {
-		LOGGER.info("Constructed an empty object");
+		LOGGER.debug("Constructed an empty object");
 	}
 
 	@Override
@@ -97,14 +97,14 @@ public class KafkaStatisticsProvider implements MetricsReporter {
 	public void metricChange(KafkaMetric metric) {
 		KafkaMetricContainer container = new KafkaMetricContainer(metric, this.prefix);
 		this.configuredMetrics.put(metric.metricName(), container);
-		LOGGER.debug("Metric {} is added/modified", container.getMetricName());
+		LOGGER.trace("Metric {} is added/modified", container.getMetricName());
 	}
 
 	@Override
 	public void metricRemoval(KafkaMetric metric) {
 		KafkaMetricContainer container = this.configuredMetrics.remove(metric.metricName());
 		if (container != null) {
-			LOGGER.debug("Metric {} is removed", container.getMetricName());
+			LOGGER.trace("Metric {} is removed", container.getMetricName());
 		}
 	}
 
@@ -115,7 +115,7 @@ public class KafkaStatisticsProvider implements MetricsReporter {
 	public void close() {
 		if (this.executorService != null && !this.executorService.isShutdown() && this.closeExecutorService) {
 			this.executorService.shutdown();
-			LOGGER.info("Object cleared, executor stopped");
+			LOGGER.debug("Object cleared, executor stopped");
 		}
 	}
 
@@ -132,7 +132,7 @@ public class KafkaStatisticsProvider implements MetricsReporter {
 	 * Actually does the configuration of {@link KafkaStatisticsProvider} instance if the appropriate {@link GaugeService} is set.
 	 */
 	protected void postConstruct() {
-		LOGGER.info("Performing initialization to schedule the metrics gathering...");
+		LOGGER.debug("Performing initialization to schedule the metrics gathering...");
 		this.configuredMetrics = new ConcurrentHashMap<>();
 		if (this.executorService == null) {
 			this.executorService = Executors.newSingleThreadScheduledExecutor();
@@ -162,6 +162,6 @@ public class KafkaStatisticsProvider implements MetricsReporter {
 				}
 			}
 		}, 0, this.updateInterval, TimeUnit.MILLISECONDS);
-		LOGGER.info("Initialization complete, metrics updating scheduled with {} ms interval between the updates", this.updateInterval);
+		LOGGER.debug("Initialization complete, metrics updating scheduled with {} ms interval between the updates", this.updateInterval);
 	}
 }

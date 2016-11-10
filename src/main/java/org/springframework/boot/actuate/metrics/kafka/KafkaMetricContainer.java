@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.stepio.kafka.support.metrics;
+package org.springframework.boot.actuate.metrics.kafka;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -30,9 +30,6 @@ import org.apache.kafka.common.metrics.KafkaMetric;
  * @author Igor Stepanov
  */
 public class KafkaMetricContainer {
-
-	protected static final String CLIENT_ID = "client-id";
-	protected static final String NODE_ID = "node-id";
 
 	private String metricName;
 	private String prefix;

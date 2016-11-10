@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.stepio.kafka.support.metrics;
+package org.springframework.boot.actuate.metrics.kafka;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
