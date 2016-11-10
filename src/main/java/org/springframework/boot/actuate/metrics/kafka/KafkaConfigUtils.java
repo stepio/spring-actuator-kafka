@@ -16,14 +16,15 @@
 
 package org.springframework.boot.actuate.metrics.kafka;
 
-import org.apache.kafka.clients.CommonClientConfigs;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.actuate.metrics.GaugeService;
-
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
+
+import org.apache.kafka.clients.CommonClientConfigs;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.springframework.boot.actuate.metrics.GaugeService;
 
 /**
  * Utility methods to simplify the initialization of properties, required for metrics' gathering.
