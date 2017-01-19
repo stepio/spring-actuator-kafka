@@ -32,6 +32,7 @@ overridedb.*
 *.iws
 .idea
 *.jar
+!.mvn/wrapper/maven-wrapper.jar
 .DS_Store
 .factorypath
 /pom.xml.versionsBackup
