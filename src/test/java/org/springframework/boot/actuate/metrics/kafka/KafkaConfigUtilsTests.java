@@ -47,13 +47,15 @@ public class KafkaConfigUtilsTests {
 						KafkaConfigUtils.configureKafkaMetrics(null, mockGaugeService());
 					}
 				});
-		final ScheduledExecutorService executors = Executors.newSingleThreadScheduledExecutor();
+		final ScheduledExecutorService executors = Executors
+				.newSingleThreadScheduledExecutor();
 		try {
 			assertThatExceptionOfType(NullPointerException.class)
 					.isThrownBy(new ThrowableAssert.ThrowingCallable() {
 						@Override
 						public void call() throws Throwable {
-							KafkaConfigUtils.configureKafkaMetrics(null, mockGaugeService(), "test", executors, 10L);
+							KafkaConfigUtils.configureKafkaMetrics(null,
+									mockGaugeService(), "test", executors, 10L);
 						}
 					});
 		}
@@ -68,20 +70,24 @@ public class KafkaConfigUtilsTests {
 				.isThrownBy(new ThrowableAssert.ThrowingCallable() {
 					@Override
 					public void call() throws Throwable {
-						KafkaConfigUtils.configureKafkaMetrics(new HashMap<String, Object>(), null);
+						KafkaConfigUtils.configureKafkaMetrics(
+								new HashMap<String, Object>(), null);
 					}
-				})
-				.withMessageContaining("Initializing GaugeService as null is meaningless!");
-		final ScheduledExecutorService executors = Executors.newSingleThreadScheduledExecutor();
+				}).withMessageContaining(
+						"Initializing GaugeService as null is meaningless!");
+		final ScheduledExecutorService executors = Executors
+				.newSingleThreadScheduledExecutor();
 		try {
 			assertThatExceptionOfType(IllegalArgumentException.class)
 					.isThrownBy(new ThrowableAssert.ThrowingCallable() {
 						@Override
 						public void call() throws Throwable {
-							KafkaConfigUtils.configureKafkaMetrics(new HashMap<String, Object>(), null, "test", executors, 10L);
+							KafkaConfigUtils.configureKafkaMetrics(
+									new HashMap<String, Object>(), null, "test",
+									executors, 10L);
 						}
-					})
-					.withMessageContaining("Initializing GaugeService as null is meaningless!");
+					}).withMessageContaining(
+							"Initializing GaugeService as null is meaningless!");
 		}
 		finally {
 			executors.shutdown();
@@ -96,12 +102,14 @@ public class KafkaConfigUtilsTests {
 		KafkaConfigUtils.configureKafkaMetrics(config, gaugeService);
 		assertThat(config).hasSize(2);
 		assertThat(config.get(CommonClientConfigs.METRIC_REPORTER_CLASSES_CONFIG))
-				.asList()
-				.contains(KafkaStatisticsProvider.class.getCanonicalName());
-		assertThat(config.get(KafkaStatisticsProvider.METRICS_GAUGE_SERVICE_IMPL)).isSameAs(gaugeService);
+				.asList().contains(KafkaStatisticsProvider.class.getCanonicalName());
+		assertThat(config.get(KafkaStatisticsProvider.METRICS_GAUGE_SERVICE_IMPL))
+				.isSameAs(gaugeService);
 		assertThat(config.get(KafkaStatisticsProvider.METRICS_PREFIX_PARAM)).isNull();
-		assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_EXECUTOR_IMPL)).isNull();
-		assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_INTERVAL_PARAM)).isNull();
+		assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_EXECUTOR_IMPL))
+				.isNull();
+		assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_INTERVAL_PARAM))
+				.isNull();
 	}
 
 	@Test
@@ -113,12 +121,15 @@ public class KafkaConfigUtilsTests {
 		KafkaConfigUtils.configureKafkaMetrics(config, gaugeService, prefix, null, null);
 		assertThat(config).hasSize(3);
 		assertThat(config.get(CommonClientConfigs.METRIC_REPORTER_CLASSES_CONFIG))
-				.asList()
-				.contains(KafkaStatisticsProvider.class.getCanonicalName());
-		assertThat(config.get(KafkaStatisticsProvider.METRICS_GAUGE_SERVICE_IMPL)).isSameAs(gaugeService);
-		assertThat(config.get(KafkaStatisticsProvider.METRICS_PREFIX_PARAM)).isEqualTo(prefix);
-		assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_EXECUTOR_IMPL)).isNull();
-		assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_INTERVAL_PARAM)).isNull();
+				.asList().contains(KafkaStatisticsProvider.class.getCanonicalName());
+		assertThat(config.get(KafkaStatisticsProvider.METRICS_GAUGE_SERVICE_IMPL))
+				.isSameAs(gaugeService);
+		assertThat(config.get(KafkaStatisticsProvider.METRICS_PREFIX_PARAM))
+				.isEqualTo(prefix);
+		assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_EXECUTOR_IMPL))
+				.isNull();
+		assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_INTERVAL_PARAM))
+				.isNull();
 	}
 
 	@Test
@@ -127,15 +138,18 @@ public class KafkaConfigUtilsTests {
 		assertThat(config).isEmpty();
 		GaugeService gaugeService = mockGaugeService();
 		Long universalAnswer = 42L;
-		KafkaConfigUtils.configureKafkaMetrics(config, gaugeService, null, null, universalAnswer);
+		KafkaConfigUtils.configureKafkaMetrics(config, gaugeService, null, null,
+				universalAnswer);
 		assertThat(config).hasSize(3);
 		assertThat(config.get(CommonClientConfigs.METRIC_REPORTER_CLASSES_CONFIG))
-				.asList()
-				.contains(KafkaStatisticsProvider.class.getCanonicalName());
-		assertThat(config.get(KafkaStatisticsProvider.METRICS_GAUGE_SERVICE_IMPL)).isSameAs(gaugeService);
+				.asList().contains(KafkaStatisticsProvider.class.getCanonicalName());
+		assertThat(config.get(KafkaStatisticsProvider.METRICS_GAUGE_SERVICE_IMPL))
+				.isSameAs(gaugeService);
 		assertThat(config.get(KafkaStatisticsProvider.METRICS_PREFIX_PARAM)).isNull();
-		assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_EXECUTOR_IMPL)).isNull();
-		assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_INTERVAL_PARAM)).isEqualTo(universalAnswer);
+		assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_EXECUTOR_IMPL))
+				.isNull();
+		assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_INTERVAL_PARAM))
+				.isEqualTo(universalAnswer);
 	}
 
 	@Test
@@ -145,15 +159,18 @@ public class KafkaConfigUtilsTests {
 			Map<String, Object> config = new HashMap<>();
 			assertThat(config).isEmpty();
 			GaugeService gaugeService = mockGaugeService();
-			KafkaConfigUtils.configureKafkaMetrics(config, gaugeService, null, executors, null);
+			KafkaConfigUtils.configureKafkaMetrics(config, gaugeService, null, executors,
+					null);
 			assertThat(config).hasSize(3);
 			assertThat(config.get(CommonClientConfigs.METRIC_REPORTER_CLASSES_CONFIG))
-					.asList()
-					.contains(KafkaStatisticsProvider.class.getCanonicalName());
-			assertThat(config.get(KafkaStatisticsProvider.METRICS_GAUGE_SERVICE_IMPL)).isSameAs(gaugeService);
+					.asList().contains(KafkaStatisticsProvider.class.getCanonicalName());
+			assertThat(config.get(KafkaStatisticsProvider.METRICS_GAUGE_SERVICE_IMPL))
+					.isSameAs(gaugeService);
 			assertThat(config.get(KafkaStatisticsProvider.METRICS_PREFIX_PARAM)).isNull();
-			assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_EXECUTOR_IMPL)).isSameAs(executors);
-			assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_INTERVAL_PARAM)).isNull();
+			assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_EXECUTOR_IMPL))
+					.isSameAs(executors);
+			assertThat(config.get(KafkaStatisticsProvider.METRICS_UPDATE_INTERVAL_PARAM))
+					.isNull();
 		}
 		finally {
 			executors.shutdown();
@@ -163,4 +180,5 @@ public class KafkaConfigUtilsTests {
 	private GaugeService mockGaugeService() {
 		return mock(GaugeService.class);
 	}
+
 }

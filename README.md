@@ -1,5 +1,8 @@
 # spring-actuator-kafka
 
+[![Build Status](https://travis-ci.org/stepio/spring-actuator-kafka.svg?branch=master)](https://travis-ci.org/stepio/spring-actuator-kafka)
+[![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=stepio_spring-actuator-kafka&metric=alert_status)](https://sonarcloud.io/dashboard?id=stepio_spring-actuator-kafka)
+
 This tiny project provides implementation for `MetricsReporter` interface, backed with Spring Actuator's `GaugeService`.
 
 Tested with [spring-projects/spring-kafka](https://github.com/spring-projects/spring-kafka). Example for consumer creation:

@@ -49,27 +49,33 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.actuate.metrics.GaugeService;
 
 /**
- * Tests for {@link KafkaStatisticsProvider}.
- * It's a single point of using PowerMock, as it was required to mock final {@link KafkaMetric}
- * for testing of my implementation of {@link org.apache.kafka.common.metrics.MetricsReporter},
- * which surprisingly depends on {@link KafkaMetric} instead of {@link org.apache.kafka.common.Metric} interface.
- * The same is reported in KAFKA-3923.
+ * Tests for {@link KafkaStatisticsProvider}. It's a single point of using PowerMock, as
+ * it was required to mock final {@link KafkaMetric} for testing of my implementation of
+ * {@link org.apache.kafka.common.metrics.MetricsReporter}, which surprisingly depends on
+ * {@link KafkaMetric} instead of {@link org.apache.kafka.common.Metric} interface. The
+ * same is reported in KAFKA-3923.
  *
  * @author Igor Stepanov
- * @see <a href="https://issues.apache.org/jira/browse/KAFKA-3923">MetricReporter interface depends on final class KafkaMetric instead of Metric interface</a>
+ * @see <a href="https://issues.apache.org/jira/browse/KAFKA-3923">MetricReporter
+ * interface depends on final class KafkaMetric instead of Metric interface</a>
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(KafkaMetric.class)
 public class KafkaStatisticsProviderTests {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(KafkaStatisticsProvider.class);
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(KafkaStatisticsProvider.class);
 
 	private Random random;
+
 	private String metricGroup;
+
 	private long updateInterval;
 
 	private CountDownLatch latch;
+
 	private GaugeService gaugeService;
+
 	private KafkaStatisticsProvider simpleProvider;
 
 	public KafkaStatisticsProviderTests() {
@@ -84,7 +90,8 @@ public class KafkaStatisticsProviderTests {
 		Map<String, Object> config = new HashMap<>();
 		this.gaugeService = mockGaugeService();
 		config.put(KafkaStatisticsProvider.METRICS_GAUGE_SERVICE_IMPL, this.gaugeService);
-		config.put(KafkaStatisticsProvider.METRICS_UPDATE_INTERVAL_PARAM, this.updateInterval);
+		config.put(KafkaStatisticsProvider.METRICS_UPDATE_INTERVAL_PARAM,
+				this.updateInterval);
 		this.simpleProvider.configure(config);
 	}
 
@@ -94,26 +101,30 @@ public class KafkaStatisticsProviderTests {
 	}
 
 	/**
-	 * Initial set of {@link KafkaMetric} instances starts being tracked with {@link GaugeService} periodically.
-	 * Each metric updates {@link GaugeService} separately.
+	 * Initial set of {@link KafkaMetric} instances starts being tracked with
+	 * {@link GaugeService} periodically. Each metric updates {@link GaugeService}
+	 * separately.
 	 */
 	@Test
 	public void init_mockMetrics() throws InterruptedException {
 		this.latch = new CountDownLatch(2);
 		this.simpleProvider.init(Arrays.asList(randomMetric(), randomMetric()));
 		assertThat(this.latch.getCount()).isEqualTo(2);
-		assertThat(this.latch.await(2 * this.updateInterval, TimeUnit.MILLISECONDS)).isTrue();
+		assertThat(this.latch.await(2 * this.updateInterval, TimeUnit.MILLISECONDS))
+				.isTrue();
 	}
 
 	/**
-	 * After adding new {@link KafkaMetric}, it's value is pushed to {@link GaugeService} periodically.
+	 * After adding new {@link KafkaMetric}, it's value is pushed to {@link GaugeService}
+	 * periodically.
 	 */
 	@Test
 	public void metricChange_mockMetric() throws InterruptedException {
 		this.latch = new CountDownLatch(1);
 		this.simpleProvider.metricChange(randomMetric());
 		assertThat(this.latch.getCount()).isEqualTo(1);
-		assertThat(this.latch.await(2 * this.updateInterval, TimeUnit.MILLISECONDS)).isTrue();
+		assertThat(this.latch.await(2 * this.updateInterval, TimeUnit.MILLISECONDS))
+				.isTrue();
 	}
 
 	/**
@@ -126,17 +137,21 @@ public class KafkaStatisticsProviderTests {
 		this.latch = new CountDownLatch(1);
 		this.simpleProvider.metricRemoval(metric);
 		assertThat(this.latch.getCount()).isEqualTo(1);
-		assertThat(this.latch.await(2 * this.updateInterval, TimeUnit.MILLISECONDS)).isFalse();
+		assertThat(this.latch.await(2 * this.updateInterval, TimeUnit.MILLISECONDS))
+				.isFalse();
 	}
 
 	@Test
 	public void close_externalExecutors() {
 		KafkaStatisticsProvider customProvider = new KafkaStatisticsProvider();
 		Map<String, Object> config = new HashMap<>();
-		config.put(KafkaStatisticsProvider.METRICS_GAUGE_SERVICE_IMPL, mockGaugeService());
+		config.put(KafkaStatisticsProvider.METRICS_GAUGE_SERVICE_IMPL,
+				mockGaugeService());
 		try {
-			config.put(KafkaStatisticsProvider.METRICS_UPDATE_EXECUTOR_IMPL, Executors.newSingleThreadScheduledExecutor());
-			config.put(KafkaStatisticsProvider.METRICS_UPDATE_INTERVAL_PARAM, this.updateInterval);
+			config.put(KafkaStatisticsProvider.METRICS_UPDATE_EXECUTOR_IMPL,
+					Executors.newSingleThreadScheduledExecutor());
+			config.put(KafkaStatisticsProvider.METRICS_UPDATE_INTERVAL_PARAM,
+					this.updateInterval);
 			customProvider.configure(config);
 			assertThat(customProvider.executorService.isShutdown()).isFalse();
 			customProvider.close();
@@ -154,7 +169,8 @@ public class KafkaStatisticsProviderTests {
 	}
 
 	/**
-	 * If {@link ScheduledExecutorService} is initialized specifically for current {@link KafkaStatisticsProvider}, it should be stopped upon closing.
+	 * If {@link ScheduledExecutorService} is initialized specifically for current
+	 * {@link KafkaStatisticsProvider}, it should be stopped upon closing.
 	 */
 	@Test
 	public void close_internalExecutors() {
@@ -186,9 +202,11 @@ public class KafkaStatisticsProviderTests {
 	public void configure_defaultUpdateInterval() {
 		KafkaStatisticsProvider customProvider = new KafkaStatisticsProvider();
 		Map<String, Object> config = new HashMap<>();
-		config.put(KafkaStatisticsProvider.METRICS_GAUGE_SERVICE_IMPL, mockGaugeService());
+		config.put(KafkaStatisticsProvider.METRICS_GAUGE_SERVICE_IMPL,
+				mockGaugeService());
 		customProvider.configure(config);
-		assertThat(customProvider.updateInterval).isEqualTo(KafkaStatisticsProvider.METRICS_UPDATE_INTERVAL_DEFAULT);
+		assertThat(customProvider.updateInterval)
+				.isEqualTo(KafkaStatisticsProvider.METRICS_UPDATE_INTERVAL_DEFAULT);
 	}
 
 	/**
@@ -196,10 +214,12 @@ public class KafkaStatisticsProviderTests {
 	 */
 	@Test
 	public void configure_customExecutorService() {
-		ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+		ScheduledExecutorService scheduledExecutorService = Executors
+				.newSingleThreadScheduledExecutor();
 		KafkaStatisticsProvider customProvider = new KafkaStatisticsProvider();
 		Map<String, Object> config = new HashMap<>();
-		config.put(KafkaStatisticsProvider.METRICS_UPDATE_EXECUTOR_IMPL, scheduledExecutorService);
+		config.put(KafkaStatisticsProvider.METRICS_UPDATE_EXECUTOR_IMPL,
+				scheduledExecutorService);
 		customProvider.configure(config);
 		assertThat(customProvider.executorService).isSameAs(scheduledExecutorService);
 	}
@@ -222,7 +242,8 @@ public class KafkaStatisticsProviderTests {
 		willAnswer(new Answer<Void>() {
 			public Void answer(InvocationOnMock invocation) {
 				Object[] args = invocation.getArguments();
-				LOGGER.info("Called GaugeService.submit with arguments: {}", Arrays.toString(args));
+				LOGGER.info("Called GaugeService.submit with arguments: {}",
+						Arrays.toString(args));
 				KafkaStatisticsProviderTests.this.latch.countDown();
 				return null;
 			}
@@ -244,4 +265,5 @@ public class KafkaStatisticsProviderTests {
 		PowerMockito.when(metric.metricName()).thenReturn(name);
 		return metric;
 	}
+
 }

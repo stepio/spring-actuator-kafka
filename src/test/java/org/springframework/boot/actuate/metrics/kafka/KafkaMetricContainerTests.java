@@ -36,8 +36,11 @@ import org.junit.Test;
 public class KafkaMetricContainerTests {
 
 	private Random random;
+
 	private String metricPrefix;
+
 	private String metricGroup;
+
 	private String metricName;
 
 	public KafkaMetricContainerTests() {
@@ -58,7 +61,8 @@ public class KafkaMetricContainerTests {
 	}
 
 	/**
-	 * Name is calculated once (upon constructing the object) and then the same instance is returned each time.
+	 * Name is calculated once (upon constructing the object) and then the same instance
+	 * is returned each time.
 	 */
 	@Test
 	public void getMetricName_withKafkaMetricContainer_same() {
@@ -68,12 +72,13 @@ public class KafkaMetricContainerTests {
 	}
 
 	/**
-	 * Name is calculated once (upon constructing the object) and then the same instance is returned each time.
+	 * Name is calculated once (upon constructing the object) and then the same instance
+	 * is returned each time.
 	 */
 	@Test
 	public void metricName_withConstantValues() {
-		assertThat(randomKafkaMetricContainer().getMetricName())
-				.isEqualTo(this.metricPrefix + '.' + this.metricGroup + '.' + this.metricName);
+		assertThat(randomKafkaMetricContainer().getMetricName()).isEqualTo(
+				this.metricPrefix + '.' + this.metricGroup + '.' + this.metricName);
 	}
 
 	/**
@@ -85,9 +90,11 @@ public class KafkaMetricContainerTests {
 		final String tag2 = "another_dummy_key";
 		final String value1 = "some_dummy_val";
 		final String value2 = "another_dummy_val";
-		assertThat(randomKafkaMetricContainer(new MetricName(this.metricName, this.metricGroup, "Test metric", tag1, value1, tag2, value2))
-				.getMetricName())
-				.isEqualTo(this.metricPrefix + '.' + value2 + '.' + value1 + '.' + this.metricGroup + '.' + this.metricName);
+		assertThat(randomKafkaMetricContainer(new MetricName(this.metricName,
+				this.metricGroup, "Test metric", tag1, value1, tag2, value2))
+						.getMetricName())
+								.isEqualTo(this.metricPrefix + '.' + value2 + '.' + value1
+										+ '.' + this.metricGroup + '.' + this.metricName);
 	}
 
 	/**
@@ -99,7 +106,10 @@ public class KafkaMetricContainerTests {
 				.isThrownBy(new ThrowableAssert.ThrowingCallable() {
 					@Override
 					public void call() throws Throwable {
-						new KafkaMetricContainer(randomMetric(new MetricName(null, KafkaMetricContainerTests.this.metricGroup)), KafkaMetricContainerTests.this.metricPrefix);
+						new KafkaMetricContainer(
+								randomMetric(new MetricName(null,
+										KafkaMetricContainerTests.this.metricGroup)),
+								KafkaMetricContainerTests.this.metricPrefix);
 					}
 				});
 	}
@@ -113,7 +123,10 @@ public class KafkaMetricContainerTests {
 				.isThrownBy(new ThrowableAssert.ThrowingCallable() {
 					@Override
 					public void call() throws Throwable {
-						new KafkaMetricContainer(randomMetric(new MetricName(KafkaMetricContainerTests.this.metricName, null)), KafkaMetricContainerTests.this.metricPrefix);
+						new KafkaMetricContainer(
+								randomMetric(new MetricName(
+										KafkaMetricContainerTests.this.metricName, null)),
+								KafkaMetricContainerTests.this.metricPrefix);
 					}
 				});
 	}
@@ -154,4 +167,5 @@ public class KafkaMetricContainerTests {
 	protected KafkaMetricContainer randomKafkaMetricContainer() {
 		return randomKafkaMetricContainer(constMetricName());
 	}
+
 }

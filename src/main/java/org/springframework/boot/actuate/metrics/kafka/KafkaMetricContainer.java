@@ -24,15 +24,17 @@ import org.apache.kafka.common.MetricName;
 import org.apache.kafka.common.metrics.KafkaMetric;
 
 /**
- * Container for {@link KafkaMetric}, defining the name of the appropriate metric,
- * which should be exposed to Spring Boot Actuator.
+ * Container for {@link KafkaMetric}, defining the name of the appropriate metric, which
+ * should be exposed to Spring Boot Actuator.
  *
  * @author Igor Stepanov
  */
 public class KafkaMetricContainer {
 
 	private String metricName;
+
 	private String prefix;
+
 	private Metric value;
 
 	public KafkaMetricContainer(Metric value, String prefix) {
@@ -65,4 +67,5 @@ public class KafkaMetricContainer {
 		builder.append(name.name());
 		return builder.toString();
 	}
+
 }
