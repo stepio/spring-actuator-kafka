@@ -75,8 +75,15 @@ public class KafkaStatisticsProvider implements MetricsReporter {
 	 */
 	public static final String METRICS_PREFIX_PARAM = "kafka.metrics.prefix";
 
-	static final long METRICS_UPDATE_INTERVAL_DEFAULT = 30000;
-	static final String METRICS_PREFIX_DEFAULT = "kafka";
+	/**
+	 * Default value for "kafka.metrics.update.interval" property.
+	 */
+	public static final long METRICS_UPDATE_INTERVAL_DEFAULT = 30000;
+
+	/**
+	 * Default value for "kafka.metrics.prefix" property.
+	 */
+	public static final String METRICS_PREFIX_DEFAULT = "kafka";
 
 	protected ConcurrentMap<MetricName, KafkaMetricContainer> configuredMetrics;
 
