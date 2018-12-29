@@ -1,8 +1,9 @@
 # spring-actuator-kafka
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/100dd036555647f689505fee873af770)](https://app.codacy.com/app/stepio/spring-actuator-kafka?utm_source=github.com&utm_medium=referral&utm_content=stepio/spring-actuator-kafka&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://travis-ci.org/stepio/spring-actuator-kafka.svg?branch=master)](https://travis-ci.org/stepio/spring-actuator-kafka)
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=stepio_spring-actuator-kafka&metric=alert_status)](https://sonarcloud.io/dashboard?id=stepio_spring-actuator-kafka)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/100dd036555647f689505fee873af770)](https://app.codacy.com/app/stepio/spring-actuator-kafka?utm_source=github.com&utm_medium=referral&utm_content=stepio/spring-actuator-kafka&utm_campaign=Badge_Grade_Dashboard)
+[![DepShield Badge](https://depshield.sonatype.org/badges/stepio/spring-actuator-kafka/depshield.svg)](https://depshield.github.io)
 
 This tiny project provides implementation for `MetricsReporter` interface, backed with Spring Actuator's `GaugeService`.
 
