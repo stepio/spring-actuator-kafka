@@ -25,6 +25,7 @@
 		<sonar-maven-plugin.version>3.5.0.1254</sonar-maven-plugin.version>
 		<!-- Additional configurations -->
 		<dependency-check-plugin.score-limit>8</dependency-check-plugin.score-limit>
+		<argLine>-Xmx1024m</argLine>
 	</properties>
 
 	<dependencyManagement>
@@ -119,7 +120,6 @@
 						<java.security.egd>file:/dev/./urandom</java.security.egd>
 						<java.awt.headless>true</java.awt.headless>
 					</systemPropertyVariables>
-					<argLine>-Xmx1024m</argLine>
 					<trimStackTrace>false</trimStackTrace>
 				</configuration>
 			</plugin>
