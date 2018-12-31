@@ -19,7 +19,7 @@
 		<java.version>1.7</java.version>
 		<assertj.version>3.4.1</assertj.version>
 		<kafka.version>0.9.0.1</kafka.version>
-		<powermock.version>1.6.5</powermock.version>
+		<powermock.version>1.7.4</powermock.version>
 		<dependency-check-plugin.version>4.0.1</dependency-check-plugin.version>
 		<jacoco-maven-plugin.version>0.8.2</jacoco-maven-plugin.version>
 		<sonar-maven-plugin.version>3.5.0.1254</sonar-maven-plugin.version>
