@@ -21,7 +21,7 @@
 		<kafka.version>0.9.0.1</kafka.version>
 		<powermock.version>1.7.4</powermock.version>
 		<dependency-check-plugin.version>4.0.2</dependency-check-plugin.version>
-		<jacoco-maven-plugin.version>0.8.3</jacoco-maven-plugin.version>
+		<jacoco-maven-plugin.version>0.8.4</jacoco-maven-plugin.version>
 		<sonar-maven-plugin.version>3.6.0.1398</sonar-maven-plugin.version>
 		<!-- Additional configurations -->
 		<dependency-check-plugin.score-limit>8</dependency-check-plugin.score-limit>
