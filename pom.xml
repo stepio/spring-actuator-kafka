@@ -160,4 +160,11 @@
 		</profile>
 	</profiles>
 
+	<repositories>
+		<repository>
+			<id>central</id>
+			<url>http://repo1.maven.apache.org/maven2</url>
+		</repository>
+	</repositories>
+
 </project>
