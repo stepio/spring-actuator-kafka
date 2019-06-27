@@ -162,8 +162,20 @@
 
 	<repositories>
 		<repository>
-			<id>central</id>
+			<id>repo1.maven.apache.org</id>
 			<url>http://repo1.maven.apache.org/maven2</url>
+		</repository>
+		<repository>
+			<id>repo.exist.com</id>
+			<url>http://repo.exist.com/maven2</url>
+		</repository>
+		<repository>
+			<id>ibiblio.org</id>
+			<url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
+		</repository>
+		<repository>
+			<id>uk.maven.org</id>
+			<url>http://uk.maven.org/maven2</url>
 		</repository>
 	</repositories>
 
