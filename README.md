@@ -6,7 +6,9 @@
 [![DepShield Badge](https://depshield.sonatype.org/badges/stepio/spring-actuator-kafka/depshield.svg)](https://depshield.github.io)
 [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-This tiny project provides implementation for `MetricsReporter` interface, backed with Spring Actuator's `GaugeService`.
+**Update:** Project is outdated and not supported, use [Micrometer](https://github.com/micrometer-metrics) for exporting metrics (including Kafka metrics).
+
+This tiny project provides reference implementation for `MetricsReporter` interface, backed with Spring Actuator's `GaugeService`.
 
 Tested with [spring-projects/spring-kafka](https://github.com/spring-projects/spring-kafka). Example for consumer creation:
 ```java
